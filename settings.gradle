@@ -1,0 +1,3 @@
+include ':BottomNavigationCircles'
+include ':app'
+rootProject.name = "BottomNavigationCirclesExample"
