@@ -4,7 +4,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -34,6 +33,8 @@ class BottomNavigationCircles : BottomNavigationView {
     private var disabledColor by Delegates.notNull<Int>()
     private var circleColor by Delegates.notNull<Int>()
     private var textColor by Delegates.notNull<Int>()
+
+    var color: Int? = null
 
     constructor(context: Context) : super(context) {
         init()
@@ -109,6 +110,10 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun animateBottomIcon(itemId: Int): Boolean {
+        if (color != null) {
+            circleColor = color!!
+        }
+
         if (itemId != currentNavigationItemId) {
             val itemView =
                     findViewById<BottomNavigationItemView>(itemId)
