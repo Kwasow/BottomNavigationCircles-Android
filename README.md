@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/Kwasow/BottomNavigationCircles-Android.svg)](https://jitpack.io/#Kwasow/BottomNavigationCircles-Android)
 
-![out](https://user-images.githubusercontent.com/10947344/111506391-db81a080-8749-11eb-9bd9-e51a079ff2fc.gif)
+![out](https://user-images.githubusercontent.com/10947344/111543019-c1a88380-8772-11eb-8fd2-2d84f5142f5a.gif)
 
 ## Instalation
 
