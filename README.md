@@ -1,5 +1,28 @@
 # BottomNavigationCircles-Android
 
+[![](https://jitpack.io/v/Kwasow/BottomNavigationCircles-Android.svg)](https://jitpack.io/#Kwasow/BottomNavigationCircles-Android)
+
+## Instalation
+
+Add jitpack.io in your top-level build.gradle:
+```gradle
+allprojects {
+        repositories {
+                ...
+                maven { url 'https://jitpack.io' }
+        }
+}
+```
+Add the dependency:
+```gradle
+dependencies {
+        implementation 'com.github.Kwasow:BottomNavigationCircles-Android:1.0'
+}
+
+```
+
+## Usage
+
 Just add the view to your layout:
 ```xml
 <androidx.coordinatorlayout.widget.CoordinatorLayout
