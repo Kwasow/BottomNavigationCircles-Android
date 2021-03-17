@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -32,6 +33,7 @@ class BottomNavigationCircles : BottomNavigationView {
     private lateinit var rootLayout: RelativeLayout
     private var disabledColor by Delegates.notNull<Int>()
     private var circleColor by Delegates.notNull<Int>()
+    private var textColor by Delegates.notNull<Int>()
 
     constructor(context: Context) : super(context) {
         init()
@@ -92,6 +94,8 @@ class BottomNavigationCircles : BottomNavigationView {
     private fun getColors() {
         disabledColor = ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
         circleColor = ContextCompat.getColor(context, R.color.design_default_color_primary)
+        val textView = TextView(context)
+        textColor = textView.currentTextColor
     }
 
     private fun selectFirstItem() {
@@ -116,6 +120,7 @@ class BottomNavigationCircles : BottomNavigationView {
             val animatorSet = AnimatorSet()
 
             subText.setTypeface(subText.typeface, Typeface.BOLD)
+            subText.setTextColor(textColor)
 
             // Navigate previous selection out
             if (currentNavigationItemId != -1) {
