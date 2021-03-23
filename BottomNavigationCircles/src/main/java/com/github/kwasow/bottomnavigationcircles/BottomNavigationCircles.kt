@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -25,6 +27,8 @@ import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates
 
 class BottomNavigationCircles : BottomNavigationView {
+    private val LOG_TAG = "BottomNavigationCircles"
+
     private var currentNavigationItemId = -1
     private var currentCircleId = -1
     private val menuViewGroupId = View.generateViewId()
@@ -109,12 +113,19 @@ class BottomNavigationCircles : BottomNavigationView {
             rootLayout.childCount > 0 &&
             ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).childCount > 0
         ) {
-            val firstElement =
-                ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).getChildAt(0)
-                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+            val navigationItemView =
+                (((rootLayout.getChildAt(0)) as BottomNavigationMenuView)
+                    .getChildAt(0) as BottomNavigationItemView)
 
-            firstElement.viewTreeObserver.addOnGlobalLayoutListener {
-                animateBottomIcon(selectedItemId)
+            val firstIcon = navigationItemView.getChildAt(0) as AppCompatImageView?
+
+            if (firstIcon != null) {
+                firstIcon.viewTreeObserver.addOnGlobalLayoutListener {
+                    animateBottomIcon(selectedItemId)
+                }
+            } else {
+                Log.e(LOG_TAG, "Couldn't find firstIcon in the navigation bar.\nChildren of " +
+                        "the first menu view are: " + navigationItemView.children)
             }
         }
     }
