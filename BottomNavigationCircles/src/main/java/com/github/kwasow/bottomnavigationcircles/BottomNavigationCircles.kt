@@ -55,15 +55,10 @@ class BottomNavigationCircles : BottomNavigationView {
 
     private fun init() {
         getColors()
-    }
-
-    override fun onAttachedToWindow() {
         setupRootLayout()
         setupListener()
         setupClipping()
         selectFirstItem()
-
-        super.onAttachedToWindow()
     }
 
     private fun setupRootLayout() {
@@ -117,15 +112,8 @@ class BottomNavigationCircles : BottomNavigationView {
                 (((rootLayout.getChildAt(0)) as BottomNavigationMenuView)
                     .getChildAt(0) as BottomNavigationItemView)
 
-            val firstIcon = navigationItemView.getChildAt(0) as AppCompatImageView?
-
-            if (firstIcon != null) {
-                firstIcon.viewTreeObserver.addOnGlobalLayoutListener {
-                    animateBottomIcon(selectedItemId)
-                }
-            } else {
-                Log.e(LOG_TAG, "Couldn't find firstIcon in the navigation bar.\nChildren of " +
-                        "the first menu view are: " + navigationItemView.children)
+            navigationItemView.viewTreeObserver.addOnGlobalLayoutListener {
+                animateBottomIcon(selectedItemId)
             }
         }
     }
