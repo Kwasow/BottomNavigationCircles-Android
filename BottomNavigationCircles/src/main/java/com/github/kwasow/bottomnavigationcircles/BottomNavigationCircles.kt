@@ -7,7 +7,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,10 +14,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarItemView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -110,7 +108,7 @@ class BottomNavigationCircles : BottomNavigationView {
         ) {
             val navigationItemView =
                 (((rootLayout.getChildAt(0)) as BottomNavigationMenuView)
-                    .getChildAt(0) as BottomNavigationItemView)
+                    .getChildAt(0) as NavigationBarItemView)
 
             navigationItemView.viewTreeObserver.addOnGlobalLayoutListener {
                 animateBottomIcon(selectedItemId)
@@ -125,11 +123,15 @@ class BottomNavigationCircles : BottomNavigationView {
 
         if (itemId != currentNavigationItemId) {
             val itemView =
-                findViewById<BottomNavigationItemView>(itemId)
+                findViewById<NavigationBarItemView>(itemId)
             val icon = itemView
-                .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                .findViewById<AppCompatImageView>(
+                    com.google.android.material.R.id.navigation_bar_item_icon_view
+                )
             val subText = itemView
-                .findViewById<TextView>(com.google.android.material.R.id.largeLabel)
+                .findViewById<TextView>(
+                    com.google.android.material.R.id.navigation_bar_item_large_label_view
+                )
             val bottomNav = this
             val animatorSet = AnimatorSet()
 
@@ -139,9 +141,11 @@ class BottomNavigationCircles : BottomNavigationView {
             // Navigate previous selection out
             if (currentNavigationItemId != -1) {
                 val currentItemView =
-                    findViewById<BottomNavigationItemView>(currentNavigationItemId)
+                    findViewById<NavigationBarItemView>(currentNavigationItemId)
                 val currentView = currentItemView
-                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                    .findViewById<AppCompatImageView>(
+                        com.google.android.material.R.id.navigation_bar_item_icon_view
+                    )
                 val oldCircle = rootLayout.findViewById<ImageView>(currentCircleId)
 
                 currentView.drawable.setTint(Color.BLACK)
