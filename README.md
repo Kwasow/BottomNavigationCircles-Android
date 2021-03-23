@@ -18,10 +18,15 @@ allprojects {
 Add the dependency:
 ```gradle
 dependencies {
-        implementation 'com.github.Kwasow:BottomNavigationCircles-Android:1.0'
+        implementation 'com.github.Kwasow:BottomNavigationCircles-Android:<Version Tag>'
 }
 
 ```
+Available versions:
+| Release | Version Tag                    | Comment                                  |
+|---------|--------------------------------|------------------------------------------|
+| stable  | 1.0                            | --                                       |
+| beta    | material-1.4.0-alpha1-SNAPSHOT | Contains fixes for material:1.4.0-alpha1 |
 
 ## Usage
 
