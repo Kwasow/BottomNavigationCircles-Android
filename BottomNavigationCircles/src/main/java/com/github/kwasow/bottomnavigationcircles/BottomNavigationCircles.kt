@@ -45,16 +45,21 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
-            super(context, attrs, defStyleAttr) {
-        init()
-    }
+        super(context, attrs, defStyleAttr) {
+            init()
+        }
 
     private fun init() {
+        getColors()
+    }
+
+    override fun onAttachedToWindow() {
         setupRootLayout()
         setupListener()
         setupClipping()
-        getColors()
         selectFirstItem()
+
+        super.onAttachedToWindow()
     }
 
     private fun setupRootLayout() {
@@ -100,12 +105,17 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun selectFirstItem() {
-        val firstElement =
+        if (
+            rootLayout.childCount > 0 &&
+            ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).childCount > 0
+        ) {
+            val firstElement =
                 ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).getChildAt(0)
-                        .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
 
-        firstElement.viewTreeObserver.addOnGlobalLayoutListener {
-            animateBottomIcon(selectedItemId)
+            firstElement.viewTreeObserver.addOnGlobalLayoutListener {
+                animateBottomIcon(selectedItemId)
+            }
         }
     }
 
@@ -116,11 +126,11 @@ class BottomNavigationCircles : BottomNavigationView {
 
         if (itemId != currentNavigationItemId) {
             val itemView =
-                    findViewById<BottomNavigationItemView>(itemId)
+                findViewById<BottomNavigationItemView>(itemId)
             val icon = itemView
-                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
             val subText = itemView
-                    .findViewById<TextView>(com.google.android.material.R.id.largeLabel)
+                .findViewById<TextView>(com.google.android.material.R.id.largeLabel)
             val bottomNav = this
             val animatorSet = AnimatorSet()
 
@@ -130,24 +140,24 @@ class BottomNavigationCircles : BottomNavigationView {
             // Navigate previous selection out
             if (currentNavigationItemId != -1) {
                 val currentItemView =
-                        findViewById<BottomNavigationItemView>(currentNavigationItemId)
+                    findViewById<BottomNavigationItemView>(currentNavigationItemId)
                 val currentView = currentItemView
-                        .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
                 val oldCircle = rootLayout.findViewById<ImageView>(currentCircleId)
 
                 currentView.drawable.setTint(Color.BLACK)
 
                 val translateDownAnimator = ObjectAnimator.ofFloat(
-                        currentView,
-                        "translationY",
-                        -(bottomNav.height / 4).toFloat(),
-                        0f
+                    currentView,
+                    "translationY",
+                    -(bottomNav.height / 4).toFloat(),
+                    0f
                 ).setDuration(500)
                 val translateCircleDownAnimator = ObjectAnimator.ofFloat(
-                        oldCircle,
-                        "translationY",
-                        -(bottomNav.height / 4).toFloat(),
-                        0f
+                    oldCircle,
+                    "translationY",
+                    -(bottomNav.height / 4).toFloat(),
+                    0f
                 ).setDuration(500)
                 val animateTintWhiteToBlack = ValueAnimator.ofArgb(Color.WHITE, disabledColor)
                 animateTintWhiteToBlack.duration = 500
@@ -156,13 +166,13 @@ class BottomNavigationCircles : BottomNavigationView {
                 }
 
                 animatorSet.playTogether(
-                        translateDownAnimator,
-                        translateCircleDownAnimator,
-                        animateTintWhiteToBlack
+                    translateDownAnimator,
+                    translateCircleDownAnimator,
+                    animateTintWhiteToBlack
                 )
                 oldCircle.animate()
-                        .alpha(0F)
-                        .duration = 500
+                    .alpha(0F)
+                    .duration = 500
 
                 GlobalScope.launch {
                     delay(500)
@@ -190,16 +200,16 @@ class BottomNavigationCircles : BottomNavigationView {
             findViewById<BottomNavigationMenuView>(menuViewGroupId).bringToFront()
 
             val translateIconUpAnimator = ObjectAnimator.ofFloat(
-                    icon,
-                    "translationY",
-                    0f,
-                    -(bottomNav.height / 4).toFloat()
+                icon,
+                "translationY",
+                0f,
+                -(bottomNav.height / 4).toFloat()
             ).setDuration(500)
             val translateCircleUpAnimator = ObjectAnimator.ofFloat(
-                    circleView,
-                    "translationY",
-                    0f,
-                    -(bottomNav.height / 4).toFloat()
+                circleView,
+                "translationY",
+                0f,
+                -(bottomNav.height / 4).toFloat()
             ).setDuration(500)
             val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, Color.WHITE)
             animateTintBlackToWhite.duration = 500
@@ -208,13 +218,13 @@ class BottomNavigationCircles : BottomNavigationView {
             }
 
             animatorSet.playTogether(
-                    translateIconUpAnimator,
-                    translateCircleUpAnimator,
-                    animateTintBlackToWhite
+                translateIconUpAnimator,
+                translateCircleUpAnimator,
+                animateTintBlackToWhite
             )
             circleView.animate()
-                    .alpha(1F)
-                    .duration = 500
+                .alpha(1F)
+                .duration = 500
 
             currentNavigationItemId = itemId
             animatorSet.start()
