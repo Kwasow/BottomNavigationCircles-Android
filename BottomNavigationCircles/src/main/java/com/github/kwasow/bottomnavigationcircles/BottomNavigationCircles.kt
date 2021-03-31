@@ -32,10 +32,17 @@ class BottomNavigationCircles : BottomNavigationView {
     private val menuViewGroupId = View.generateViewId()
 
     private lateinit var rootLayout: RelativeLayout
-    private var disabledColor by Delegates.notNull<Int>()
+    private var disabledColor =
+        ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
+    private var enabledColor = Color.WHITE
     private var textColor by Delegates.notNull<Int>()
 
     var circleColor = Color.GREEN
+    var darkIcon = false
+        set(value) {
+            field = value
+            updateEnabledColor()
+        }
 
     constructor(context: Context) : super(context) {
         init()
@@ -68,7 +75,6 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun getColors(attrs: AttributeSet?) {
-        disabledColor = ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
         circleColor = getAttributeColorOrDefault(attrs)
         val textView = TextView(context)
         textColor = textView.currentTextColor
@@ -85,7 +91,12 @@ class BottomNavigationCircles : BottomNavigationView {
                     R.styleable.BottomNavigationCircles_circleColor,
                     ContextCompat.getColor(context, R.color.design_default_color_primary)
                 )
+                darkIcon = getBoolean(
+                    R.styleable.BottomNavigationCircles_darkIcon,
+                    false
+                )
             } finally {
+                updateEnabledColor()
                 recycle()
             }
         }
@@ -136,6 +147,10 @@ class BottomNavigationCircles : BottomNavigationView {
         }
     }
 
+    private fun updateEnabledColor() {
+        enabledColor = if (darkIcon) Color.BLACK else Color.WHITE
+    }
+
     private fun animateBottomIcon(itemId: Int): Boolean {
         if (itemId != currentNavigationItemId) {
             val itemView =
@@ -178,7 +193,7 @@ class BottomNavigationCircles : BottomNavigationView {
                     -(bottomNav.height / 4).toFloat(),
                     0f
                 ).setDuration(500)
-                val animateTintWhiteToBlack = ValueAnimator.ofArgb(Color.WHITE, disabledColor)
+                val animateTintWhiteToBlack = ValueAnimator.ofArgb(enabledColor, disabledColor)
                 animateTintWhiteToBlack.duration = 500
                 animateTintWhiteToBlack.addUpdateListener {
                     currentView.drawable.setTint(it.animatedValue as Int)
@@ -230,7 +245,7 @@ class BottomNavigationCircles : BottomNavigationView {
                 0f,
                 -(bottomNav.height / 4).toFloat()
             ).setDuration(500)
-            val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, Color.WHITE)
+            val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, enabledColor)
             animateTintBlackToWhite.duration = 500
             animateTintBlackToWhite.addUpdateListener {
                 icon.drawable.setTint(it.animatedValue as Int)
