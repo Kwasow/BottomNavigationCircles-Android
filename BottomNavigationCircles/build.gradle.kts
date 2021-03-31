@@ -4,7 +4,7 @@ plugins {
     kotlin("android")
 }
 
-val sharedVersionName = "1.1-beta3"
+val sharedVersionName = "1.1-beta4"
 
 fun versionCode(): Int {
     val secondsSinceEpoch = System.currentTimeMillis() / 1000
