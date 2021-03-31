@@ -17,7 +17,7 @@ android {
         minSdkVersion(21)
         targetSdkVersion(30)
         versionCode = versionCode()
-        versionName = "1.1"
+        versionName = "1.1-beta1"
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
         consumerProguardFiles("consumer-rules.pro")

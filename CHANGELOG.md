@@ -1,4 +1,4 @@
-## 1.1 (in progress)
+## 1.1 (in beta)
  - Updated for material-1.4.0
  - Changed circle color setter
  - Added setting color in XML
