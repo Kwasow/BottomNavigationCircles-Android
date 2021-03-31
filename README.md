@@ -45,3 +45,7 @@ The background color will be set to your themes primary color. You may also set 
 ```kotlin
 navigationView.color = Color.RED
 ```
+Or through XML:
+```XML
+app:circleColor="@color/red"
+```
