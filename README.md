@@ -26,7 +26,7 @@ Available versions:
 | Release | Version Tag                    | Comment                                  |
 |---------|--------------------------------|------------------------------------------|
 | stable  | 1.0                            | --                                       |
-| beta    | 1.1-beta4                      | Contains fixes for material:1.4.0        |
+| beta    | 1.1-beta5                      | Contains fixes for material:1.4.0        |
 
 ## Usage
 
