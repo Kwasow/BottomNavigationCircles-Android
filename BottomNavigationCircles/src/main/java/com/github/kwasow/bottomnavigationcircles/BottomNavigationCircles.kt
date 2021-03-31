@@ -43,16 +43,16 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
+        init(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
         super(context, attrs, defStyleAttr) {
-            init()
+            init(attrs)
         }
 
-    private fun init() {
-        getColors()
+    private fun init(attrs: AttributeSet? = null) {
+        getColors(attrs)
         setupRootLayout()
         setupListener()
         setupClipping()
@@ -66,6 +66,32 @@ class BottomNavigationCircles : BottomNavigationView {
         removeView(menuViewGroup)
         rootLayout.addView(menuViewGroup)
         addView(rootLayout)
+    }
+
+    private fun getColors(attrs: AttributeSet?) {
+        disabledColor = ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
+        circleColor = getAttributeColorOrDefault(attrs)
+        val textView = TextView(context)
+        textColor = textView.currentTextColor
+    }
+
+    private fun getAttributeColorOrDefault(attrs: AttributeSet?): Int {
+        var color: Int
+
+        context.theme.obtainStyledAttributes(
+            attrs, R.styleable.BottomNavigationCircles, 0, 0
+        ).apply {
+            try {
+                color = getInteger(
+                    R.styleable.BottomNavigationCircles_circleColor,
+                    ContextCompat.getColor(context, R.color.design_default_color_primary)
+                )
+            } finally {
+                recycle()
+            }
+        }
+
+        return color
     }
 
     private fun setupListener() {
@@ -94,21 +120,16 @@ class BottomNavigationCircles : BottomNavigationView {
         }
     }
 
-    private fun getColors() {
-        disabledColor = ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
-        circleColor = ContextCompat.getColor(context, R.color.design_default_color_primary)
-        val textView = TextView(context)
-        textColor = textView.currentTextColor
-    }
-
     private fun selectFirstItem() {
         if (
             rootLayout.childCount > 0 &&
             ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).childCount > 0
         ) {
             val navigationItemView =
-                (((rootLayout.getChildAt(0)) as BottomNavigationMenuView)
-                    .getChildAt(0) as NavigationBarItemView)
+                (
+                    (rootLayout.getChildAt(0) as BottomNavigationMenuView)
+                        .getChildAt(0) as NavigationBarItemView
+                )
 
             navigationItemView.viewTreeObserver.addOnGlobalLayoutListener {
                 animateBottomIcon(selectedItemId)
