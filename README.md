@@ -28,7 +28,6 @@ Available versions:
 | stable  | 1.0                            | --                                       |
 | beta    | 1.1-beta1                      | Contains fixes for material:1.4.0        |
 
-
 ## Usage
 
 Just add the view to your layout:
