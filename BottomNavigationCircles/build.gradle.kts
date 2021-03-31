@@ -3,6 +3,12 @@ plugins {
     kotlin("android")
 }
 
+fun versionCode(): Int {
+    val secondsSinceEpoch = System.currentTimeMillis() / 1000
+    // This will fail eventually, but well… It's the best we have
+    return secondsSinceEpoch.toInt()
+}
+
 android {
     compileSdkVersion(30)
     buildToolsVersion = "30.0.3"
@@ -10,7 +16,7 @@ android {
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 2
+        versionCode = versionCode()
         versionName = "1.1"
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
@@ -41,7 +47,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.32")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
-    api("com.google.android.material:material:1.4.0-alpha01")
+    api("com.google.android.material:material:1.4.0-alpha02")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
