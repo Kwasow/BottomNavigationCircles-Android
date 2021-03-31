@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("maven-publish")
     kotlin("android")
 }
 
@@ -17,7 +18,7 @@ android {
         minSdkVersion(21)
         targetSdkVersion(30)
         versionCode = versionCode()
-        versionName = "1.1-beta1"
+        versionName = "1.1-beta2"
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
         consumerProguardFiles("consumer-rules.pro")
