@@ -26,7 +26,7 @@ Available versions:
 | Release | Version Tag                    | Comment                                  |
 |---------|--------------------------------|------------------------------------------|
 | stable  | 1.0                            | --                                       |
-| beta    | material-1.4.0-alpha1-SNAPSHOT | Contains fixes for material:1.4.0-alpha1 |
+| beta    | 1.1-beta1                      | Contains fixes for material:1.4.0        |
 
 ## Usage
 
@@ -46,7 +46,13 @@ Just add the view to your layout:
 ```
 
 The view is an extension to the material.io BottomNavigationView, and implements all it's functions.
-The background color will be set to your themes primary color. You may also set the color with:
+The following custom properties are available:
 ```kotlin
-navigationView.color = Color.RED
+navigationView.circleColor = Color.RED
+navigationView.darkIcon = true
+```
+Or through XML:
+```XML
+app:circleColor="@color/red"
+app:darkIcon="true"
 ```

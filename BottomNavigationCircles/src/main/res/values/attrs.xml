@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomNavigationCircles">
+        <attr name="circleColor" format="color"/>
+        <attr name="darkIcon" format="boolean"/>
+    </declare-styleable>
+</resources>

@@ -7,7 +7,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,10 +14,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarItemView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -34,27 +32,33 @@ class BottomNavigationCircles : BottomNavigationView {
     private val menuViewGroupId = View.generateViewId()
 
     private lateinit var rootLayout: RelativeLayout
-    private var disabledColor by Delegates.notNull<Int>()
-    private var circleColor by Delegates.notNull<Int>()
+    private var disabledColor =
+        ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
+    private var enabledColor = Color.WHITE
     private var textColor by Delegates.notNull<Int>()
 
-    var color: Int? = null
+    var circleColor = Color.GREEN
+    var darkIcon = false
+        set(value) {
+            field = value
+            updateEnabledColor()
+        }
 
     constructor(context: Context) : super(context) {
         init()
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
+        init(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
         super(context, attrs, defStyleAttr) {
-            init()
+            init(attrs)
         }
 
-    private fun init() {
-        getColors()
+    private fun init(attrs: AttributeSet? = null) {
+        getColors(attrs)
         setupRootLayout()
         setupListener()
         setupClipping()
@@ -68,6 +72,36 @@ class BottomNavigationCircles : BottomNavigationView {
         removeView(menuViewGroup)
         rootLayout.addView(menuViewGroup)
         addView(rootLayout)
+    }
+
+    private fun getColors(attrs: AttributeSet?) {
+        circleColor = getAttributeColorOrDefault(attrs)
+        val textView = TextView(context)
+        textColor = textView.currentTextColor
+    }
+
+    private fun getAttributeColorOrDefault(attrs: AttributeSet?): Int {
+        var color: Int
+
+        context.theme.obtainStyledAttributes(
+            attrs, R.styleable.BottomNavigationCircles, 0, 0
+        ).apply {
+            try {
+                color = getInteger(
+                    R.styleable.BottomNavigationCircles_circleColor,
+                    ContextCompat.getColor(context, R.color.design_default_color_primary)
+                )
+                darkIcon = getBoolean(
+                    R.styleable.BottomNavigationCircles_darkIcon,
+                    false
+                )
+            } finally {
+                updateEnabledColor()
+                recycle()
+            }
+        }
+
+        return color
     }
 
     private fun setupListener() {
@@ -96,21 +130,16 @@ class BottomNavigationCircles : BottomNavigationView {
         }
     }
 
-    private fun getColors() {
-        disabledColor = ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
-        circleColor = ContextCompat.getColor(context, R.color.design_default_color_primary)
-        val textView = TextView(context)
-        textColor = textView.currentTextColor
-    }
-
     private fun selectFirstItem() {
         if (
             rootLayout.childCount > 0 &&
             ((rootLayout.getChildAt(0)) as BottomNavigationMenuView).childCount > 0
         ) {
             val navigationItemView =
-                (((rootLayout.getChildAt(0)) as BottomNavigationMenuView)
-                    .getChildAt(0) as BottomNavigationItemView)
+                (
+                    (rootLayout.getChildAt(0) as BottomNavigationMenuView)
+                        .getChildAt(0) as NavigationBarItemView
+                )
 
             navigationItemView.viewTreeObserver.addOnGlobalLayoutListener {
                 animateBottomIcon(selectedItemId)
@@ -118,18 +147,22 @@ class BottomNavigationCircles : BottomNavigationView {
         }
     }
 
-    private fun animateBottomIcon(itemId: Int): Boolean {
-        if (color != null) {
-            circleColor = color!!
-        }
+    private fun updateEnabledColor() {
+        enabledColor = if (darkIcon) Color.BLACK else Color.WHITE
+    }
 
+    private fun animateBottomIcon(itemId: Int): Boolean {
         if (itemId != currentNavigationItemId) {
             val itemView =
-                findViewById<BottomNavigationItemView>(itemId)
+                findViewById<NavigationBarItemView>(itemId)
             val icon = itemView
-                .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                .findViewById<AppCompatImageView>(
+                    com.google.android.material.R.id.navigation_bar_item_icon_view
+                )
             val subText = itemView
-                .findViewById<TextView>(com.google.android.material.R.id.largeLabel)
+                .findViewById<TextView>(
+                    com.google.android.material.R.id.navigation_bar_item_large_label_view
+                )
             val bottomNav = this
             val animatorSet = AnimatorSet()
 
@@ -139,9 +172,11 @@ class BottomNavigationCircles : BottomNavigationView {
             // Navigate previous selection out
             if (currentNavigationItemId != -1) {
                 val currentItemView =
-                    findViewById<BottomNavigationItemView>(currentNavigationItemId)
+                    findViewById<NavigationBarItemView>(currentNavigationItemId)
                 val currentView = currentItemView
-                    .findViewById<AppCompatImageView>(com.google.android.material.R.id.icon)
+                    .findViewById<AppCompatImageView>(
+                        com.google.android.material.R.id.navigation_bar_item_icon_view
+                    )
                 val oldCircle = rootLayout.findViewById<ImageView>(currentCircleId)
 
                 currentView.drawable.setTint(Color.BLACK)
@@ -158,7 +193,7 @@ class BottomNavigationCircles : BottomNavigationView {
                     -(bottomNav.height / 4).toFloat(),
                     0f
                 ).setDuration(500)
-                val animateTintWhiteToBlack = ValueAnimator.ofArgb(Color.WHITE, disabledColor)
+                val animateTintWhiteToBlack = ValueAnimator.ofArgb(enabledColor, disabledColor)
                 animateTintWhiteToBlack.duration = 500
                 animateTintWhiteToBlack.addUpdateListener {
                     currentView.drawable.setTint(it.animatedValue as Int)
@@ -210,7 +245,7 @@ class BottomNavigationCircles : BottomNavigationView {
                 0f,
                 -(bottomNav.height / 4).toFloat()
             ).setDuration(500)
-            val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, Color.WHITE)
+            val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, enabledColor)
             animateTintBlackToWhite.duration = 500
             animateTintBlackToWhite.addUpdateListener {
                 icon.drawable.setTint(it.animatedValue as Int)
