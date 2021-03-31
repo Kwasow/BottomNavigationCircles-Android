@@ -4,6 +4,8 @@ plugins {
     kotlin("android")
 }
 
+val sharedVersionName = "1.1-beta2"
+
 fun versionCode(): Int {
     val secondsSinceEpoch = System.currentTimeMillis() / 1000
     // This will fail eventually, but well… It's the best we have
@@ -18,7 +20,7 @@ android {
         minSdkVersion(21)
         targetSdkVersion(30)
         versionCode = versionCode()
-        versionName = "1.1-beta2"
+        versionName = sharedVersionName
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
         consumerProguardFiles("consumer-rules.pro")
@@ -53,4 +55,18 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "com.github.kwasow"
+                artifactId = "bottomnavigationcircles"
+                version = sharedVersionName
+            }
+        }
+    }
 }
