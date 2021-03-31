@@ -33,10 +33,9 @@ class BottomNavigationCircles : BottomNavigationView {
 
     private lateinit var rootLayout: RelativeLayout
     private var disabledColor by Delegates.notNull<Int>()
-    private var circleColor by Delegates.notNull<Int>()
     private var textColor by Delegates.notNull<Int>()
 
-    var color: Int? = null
+    var circleColor = Color.GREEN
 
     constructor(context: Context) : super(context) {
         init()
@@ -138,10 +137,6 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun animateBottomIcon(itemId: Int): Boolean {
-        if (color != null) {
-            circleColor = color!!
-        }
-
         if (itemId != currentNavigationItemId) {
             val itemView =
                 findViewById<NavigationBarItemView>(itemId)

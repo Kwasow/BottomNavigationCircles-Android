@@ -43,7 +43,7 @@ Just add the view to your layout:
 The view is an extension to the material.io BottomNavigationView, and implements all it's functions.
 The background color will be set to your themes primary color. You may also set the color with:
 ```kotlin
-navigationView.color = Color.RED
+navigationView.circleColor = Color.RED
 ```
 Or through XML:
 ```XML
