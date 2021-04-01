@@ -153,56 +153,26 @@ class BottomNavigationCircles : BottomNavigationView {
 
     private fun animateBottomIcon(itemId: Int): Boolean {
         if (itemId != currentNavigationItemId) {
-            val itemView =
-                findViewById<NavigationBarItemView>(itemId)
-            val icon = itemView
-                .findViewById<AppCompatImageView>(
-                    com.google.android.material.R.id.navigation_bar_item_icon_view
-                )
-            val subText = itemView
-                .findViewById<TextView>(
-                    com.google.android.material.R.id.navigation_bar_item_large_label_view
-                )
+            val itemView = getNavigationBarItemView(itemId)
+            val icon = getAppCompatImageView(itemView)
+            val subText = getSubTextView(itemView)
             val bottomNav = this
             val animatorSet = AnimatorSet()
 
-            subText.setTypeface(subText.typeface, Typeface.BOLD)
-            subText.setTextColor(textColor)
+            setSubTextStyle(subText)
 
             // Navigate previous selection out
             if (currentNavigationItemId != -1) {
-                val currentItemView =
-                    findViewById<NavigationBarItemView>(currentNavigationItemId)
-                val currentView = currentItemView
-                    .findViewById<AppCompatImageView>(
-                        com.google.android.material.R.id.navigation_bar_item_icon_view
-                    )
+                val currentItemView = getNavigationBarItemView(currentNavigationItemId)
+                val currentView = getAppCompatImageView(currentItemView)
                 val oldCircle = rootLayout.findViewById<ImageView>(currentCircleId)
 
                 currentView.drawable.setTint(Color.BLACK)
 
-                val translateDownAnimator = ObjectAnimator.ofFloat(
-                    currentView,
-                    "translationY",
-                    -(bottomNav.height / 4).toFloat(),
-                    0f
-                ).setDuration(500)
-                val translateCircleDownAnimator = ObjectAnimator.ofFloat(
-                    oldCircle,
-                    "translationY",
-                    -(bottomNav.height / 4).toFloat(),
-                    0f
-                ).setDuration(500)
-                val animateTintWhiteToBlack = ValueAnimator.ofArgb(enabledColor, disabledColor)
-                animateTintWhiteToBlack.duration = 500
-                animateTintWhiteToBlack.addUpdateListener {
-                    currentView.drawable.setTint(it.animatedValue as Int)
-                }
-
                 animatorSet.playTogether(
-                    translateDownAnimator,
-                    translateCircleDownAnimator,
-                    animateTintWhiteToBlack
+                    buildTranslateIconAnimator(currentView, -(height / 4).toFloat(), 0f),
+                    buildTranslateCircleAnimator(oldCircle, -(height / 4).toFloat(), 0f),
+                    buildTintAnimator(currentView, enabledColor, disabledColor)
                 )
                 oldCircle.animate()
                     .alpha(0F)
@@ -217,45 +187,25 @@ class BottomNavigationCircles : BottomNavigationView {
             }
 
             // Navigate new selection in
-            val circleDrawable = ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
-            circleDrawable?.setTint(circleColor)
-            val circleView = ImageView(context)
-            circleView.id = View.generateViewId()
+            val circleView = buildBackgroundCircle()
             currentCircleId = circleView.id
-            circleView.setPadding(0, 0, 0, subText.height / 3)
-            circleView.alpha = 0F
+
             rootLayout.addView(circleView)
-            val params = circleView.layoutParams
-            params.width = icon.width * 2
-            params.height = icon.height * 2
-            circleView.layoutParams = params
-            circleView.setImageDrawable(circleDrawable)
-            circleView.x = itemView.x + itemView.width / 2 - icon.width
             findViewById<BottomNavigationMenuView>(menuViewGroupId).bringToFront()
 
-            val translateIconUpAnimator = ObjectAnimator.ofFloat(
-                icon,
-                "translationY",
-                0f,
-                -(bottomNav.height / 4).toFloat()
-            ).setDuration(500)
-            val translateCircleUpAnimator = ObjectAnimator.ofFloat(
+            setCircleSizeAndPosition(
                 circleView,
-                "translationY",
-                0f,
-                -(bottomNav.height / 4).toFloat()
-            ).setDuration(500)
-            val animateTintBlackToWhite = ValueAnimator.ofArgb(disabledColor, enabledColor)
-            animateTintBlackToWhite.duration = 500
-            animateTintBlackToWhite.addUpdateListener {
-                icon.drawable.setTint(it.animatedValue as Int)
-            }
+                subText.height,
+                icon.width * 2,
+                itemView.x + itemView.width / 2 - icon.width
+            )
 
             animatorSet.playTogether(
-                translateIconUpAnimator,
-                translateCircleUpAnimator,
-                animateTintBlackToWhite
+                buildTranslateIconAnimator(icon, 0f, -(bottomNav.height / 4).toFloat()),
+                buildTranslateCircleAnimator(circleView, 0f, -(height / 4).toFloat()),
+                buildTintAnimator(icon, disabledColor, enabledColor)
             )
+
             circleView.animate()
                 .alpha(1F)
                 .duration = 500
@@ -265,5 +215,80 @@ class BottomNavigationCircles : BottomNavigationView {
         }
 
         return true
+    }
+
+    private fun getNavigationBarItemView(itemId: Int): NavigationBarItemView {
+        return findViewById(itemId)
+    }
+
+    private fun getAppCompatImageView(itemView: NavigationBarItemView): AppCompatImageView {
+        return itemView.findViewById(
+            com.google.android.material.R.id.navigation_bar_item_icon_view
+        )
+    }
+
+    private fun getSubTextView(itemView: NavigationBarItemView): TextView {
+        return itemView.findViewById(
+            com.google.android.material.R.id.navigation_bar_item_large_label_view
+        )
+    }
+
+    private fun setSubTextStyle(textView: TextView) {
+        textView.setTypeface(textView.typeface, Typeface.BOLD)
+        textView.setTextColor(textColor)
+    }
+
+    private fun buildTranslateIconAnimator(currentView: View, from: Float, to: Float):
+        ObjectAnimator {
+            return ObjectAnimator.ofFloat(
+                currentView,
+                "translationY",
+                from, to
+            ).setDuration(500)
+        }
+
+    private fun buildTranslateCircleAnimator(oldCircle: View, from: Float, to: Float):
+        ObjectAnimator {
+            return ObjectAnimator.ofFloat(
+                oldCircle,
+                "translationY",
+                from, to
+            ).setDuration(500)
+        }
+
+    private fun buildTintAnimator(currentView: AppCompatImageView, from: Int, to: Int):
+        ValueAnimator {
+            val animateTint = ValueAnimator.ofArgb(from, to)
+            animateTint.duration = 500
+            animateTint.addUpdateListener {
+                currentView.drawable.setTint(it.animatedValue as Int)
+            }
+
+            return animateTint
+        }
+
+    private fun buildBackgroundCircle(): ImageView {
+        val circleDrawable = ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
+        circleDrawable?.setTint(circleColor)
+        val circleView = ImageView(context)
+        circleView.id = View.generateViewId()
+        circleView.setImageDrawable(circleDrawable)
+        circleView.alpha = 0F
+
+        return circleView
+    }
+
+    private fun setCircleSizeAndPosition(
+        circleView: ImageView,
+        paddingBottom: Int,
+        size: Int,
+        x: Float
+    ) {
+        val params = circleView.layoutParams
+        circleView.setPadding(0, 0, 0, paddingBottom / 3)
+        params.width = size
+        params.height = size
+        circleView.layoutParams = params
+        circleView.x = x
     }
 }
