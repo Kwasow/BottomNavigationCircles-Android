@@ -25,8 +25,8 @@ dependencies {
 Available versions:
 | Release | Version Tag                    | Comment                                  |
 |---------|--------------------------------|------------------------------------------|
-| stable  | 1.0                            | --                                       |
-| beta    | 1.1-beta5                      | Contains fixes for material:1.4.0        |
+| stable  | 1.0                            | material [version <= 1.3.0]              |
+| beta    | 1.1-beta5                      | material [version >= 1.4.0]              |
 
 ## Usage
 
