@@ -3,5 +3,9 @@
     <declare-styleable name="BottomNavigationCircles">
         <attr name="circleColor" format="color"/>
         <attr name="darkIcon" format="boolean"/>
+        <attr name="backgroundShape" format="enum">
+            <enum name="circle" value="0"/>
+            <enum name="roundedRectangle" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
