@@ -6,7 +6,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -33,18 +32,28 @@ class BottomNavigationCircles : BottomNavigationView {
     private val menuViewGroupId = View.generateViewId()
 
     private lateinit var rootLayout: RelativeLayout
-    private var backgroundShape: Drawable? = null
     private var disabledColor =
         ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium)
     private var enabledColor = Color.WHITE
     private var textColor by Delegates.notNull<Int>()
 
+    var backgroundShape = Shape.Circle
     var circleColor = Color.GREEN
     var darkIcon = false
         set(value) {
             field = value
             updateEnabledColor()
         }
+
+    enum class Shape(val value: Int) {
+        Circle(0),
+        RoundedRectangle(1);
+
+        companion object {
+            private val VALUES = values()
+            fun getByValue(value: Int) = VALUES.firstOrNull { it.value == value }
+        }
+    }
 
     constructor(context: Context) : super(context) {
         init()
@@ -99,21 +108,16 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun getBackgroundDrawable(attrs: AttributeSet?) {
-        val backgroundShapeAttribute: Int
         context.theme.obtainStyledAttributes(
             attrs, R.styleable.BottomNavigationCircles, 0, 0
         ).apply {
             try {
-                backgroundShapeAttribute = getInteger(
-                    R.styleable.BottomNavigationCircles_backgroundShape,
-                    0
-                )
-
-                backgroundShape = if (backgroundShapeAttribute == 1) {
-                    ContextCompat.getDrawable(context, R.drawable.bg_green_rectangle)
-                } else {
-                    ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
-                }
+                backgroundShape = Shape.getByValue(
+                    getInt(
+                        R.styleable.BottomNavigationCircles_backgroundShape,
+                        0
+                    )
+                )!!
             } finally {
                 recycle()
             }
@@ -293,10 +297,14 @@ class BottomNavigationCircles : BottomNavigationView {
         }
 
     private fun buildBackgroundCircle(): ImageView {
-        backgroundShape?.setTint(circleColor)
+        val backgroundShapeDrawable = when (backgroundShape) {
+            Shape.Circle -> ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
+            Shape.RoundedRectangle -> ContextCompat.getDrawable(context, R.drawable.bg_green_rectangle)
+        }
+        backgroundShapeDrawable?.setTint(circleColor)
         val circleView = ImageView(context)
         circleView.id = View.generateViewId()
-        circleView.setImageDrawable(backgroundShape)
+        circleView.setImageDrawable(backgroundShapeDrawable)
         circleView.alpha = 0F
 
         return circleView

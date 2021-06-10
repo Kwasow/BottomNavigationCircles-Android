@@ -50,6 +50,7 @@ The following custom properties are available:
 ```kotlin
 navigationView.circleColor = Color.RED
 navigationView.darkIcon = true
+navigationView.backgroundShape = BottomNavigationView.Shape.RoundedRectangle
 ```
 Or through XML:
 ```XML
