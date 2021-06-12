@@ -57,4 +57,7 @@ Or through XML:
 app:circleColor="@color/red"
 app:darkIcon="true"
 app:backgroundShape="circle|roundedRectangle"
+app:customBackgroundShape="@drawable/bg_custom"
 ```
+
+The recommended size for custom backgrounds is 24dp by 24dp.

@@ -13,6 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigation = findViewById<BottomNavigationCircles>(R.id.bottomNavigation)
         bottomNavigation.circleColor = Color.RED
-        bottomNavigation.backgroundShape = BottomNavigationCircles.Shape.RoundedRectangle
+        // bottomNavigation.backgroundShape = BottomNavigationCircles.Shape.RoundedRectangle
     }
 }

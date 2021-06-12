@@ -7,5 +7,6 @@
             <enum name="circle" value="0"/>
             <enum name="roundedRectangle" value="1"/>
         </attr>
+        <attr name="customBackgroundShape" format="reference"/>
     </declare-styleable>
 </resources>

@@ -38,6 +38,7 @@ class BottomNavigationCircles : BottomNavigationView {
     private var textColor by Delegates.notNull<Int>()
 
     var backgroundShape = Shape.Circle
+    private var customBackgroundDrawable = -1
     var circleColor = Color.GREEN
     var darkIcon = false
         set(value) {
@@ -118,6 +119,10 @@ class BottomNavigationCircles : BottomNavigationView {
                         0
                     )
                 )!!
+                customBackgroundDrawable = getResourceId(
+                    R.styleable.BottomNavigationCircles_customBackgroundShape,
+                    -1
+                )
             } finally {
                 recycle()
             }
@@ -297,15 +302,25 @@ class BottomNavigationCircles : BottomNavigationView {
         }
 
     private fun buildBackgroundCircle(): ImageView {
-        val backgroundShapeDrawable = when (backgroundShape) {
-            Shape.Circle -> ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
-            Shape.RoundedRectangle -> ContextCompat.getDrawable(context, R.drawable.bg_green_rectangle)
-        }
-        backgroundShapeDrawable?.setTint(circleColor)
         val circleView = ImageView(context)
         circleView.id = View.generateViewId()
-        circleView.setImageDrawable(backgroundShapeDrawable)
         circleView.alpha = 0F
+
+        if (customBackgroundDrawable == -1) {
+            val backgroundShapeDrawable = when (backgroundShape) {
+                Shape.Circle -> ContextCompat.getDrawable(context, R.drawable.bg_green_circle)
+                Shape.RoundedRectangle -> ContextCompat.getDrawable(
+                    context,
+                    R.drawable.bg_green_rectangle
+                )
+            }
+            backgroundShapeDrawable?.setTint(circleColor)
+            circleView.setImageDrawable(backgroundShapeDrawable)
+        } else {
+            val drawable = ContextCompat.getDrawable(context, customBackgroundDrawable)
+            drawable?.setTint(circleColor)
+            circleView.setImageDrawable(drawable)
+        }
 
         return circleView
     }
