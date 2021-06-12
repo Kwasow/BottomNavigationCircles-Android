@@ -50,9 +50,14 @@ The following custom properties are available:
 ```kotlin
 navigationView.circleColor = Color.RED
 navigationView.darkIcon = true
+navigationView.backgroundShape = BottomNavigationView.Shape.RoundedRectangle
 ```
 Or through XML:
 ```XML
 app:circleColor="@color/red"
 app:darkIcon="true"
+app:backgroundShape="circle|roundedRectangle"
+app:customBackgroundShape="@drawable/bg_custom"
 ```
+
+The recommended size for custom backgrounds is 24dp by 24dp.
