@@ -16,7 +16,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode getDate() as Integer
-        versionName "1.1-beta5"
+        versionName "1.1-beta6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -58,7 +58,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.kwasow'
                 artifactId = 'bottomnavigationcircles'
-                version = '1.1-beta5'
+                version = '1.1-beta6'
             }
         }
     }
