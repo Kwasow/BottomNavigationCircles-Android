@@ -190,7 +190,6 @@ class BottomNavigationCircles : BottomNavigationView {
             val itemView = getNavigationBarItemView(itemId)
             val icon = getAppCompatImageView(itemView)
             val subText = getSubTextView(itemView)
-            val bottomNav = this
             val animatorSet = AnimatorSet()
 
             setSubTextStyle(subText)
@@ -235,7 +234,7 @@ class BottomNavigationCircles : BottomNavigationView {
             )
 
             animatorSet.playTogether(
-                buildTranslateIconAnimator(icon, 0f, -(bottomNav.height / 4).toFloat()),
+                buildTranslateIconAnimator(icon, 0f, -(height / 4).toFloat()),
                 buildTranslateCircleAnimator(circleView, 0f, -(height / 4).toFloat()),
                 buildTintAnimator(icon, disabledColor, enabledColor)
             )
