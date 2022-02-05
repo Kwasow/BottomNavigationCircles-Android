@@ -4,6 +4,12 @@
 
 ![out](https://user-images.githubusercontent.com/10947344/111543019-c1a88380-8772-11eb-8fd2-2d84f5142f5a.gif)
 
+## Maintenance
+
+With the release of Material Design 3.0 I don't find it relevant to support this plugin any longer. It doesn't really fit
+the new guidelines and as I'm moving my personal projects to the new design style I also have little time to continue
+maintaining the package. I consider it to be stable and usable in it's current state.
+
 ## Instalation
 
 Add jitpack.io in your top-level build.gradle:
