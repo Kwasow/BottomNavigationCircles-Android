@@ -139,8 +139,8 @@ class BottomNavigationCircles : BottomNavigationView {
     }
 
     private fun setupListener() {
-        setOnNavigationItemSelectedListener {
-            return@setOnNavigationItemSelectedListener animateBottomIcon(it.itemId)
+        setOnItemSelectedListener {
+            return@setOnItemSelectedListener animateBottomIcon(it.itemId)
         }
     }
 
