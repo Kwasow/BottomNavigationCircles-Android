@@ -189,6 +189,7 @@ class BottomNavigationCircles : BottomNavigationView {
         if (itemId != currentNavigationItemId) {
             val itemView = getNavigationBarItemView(itemId)
             val icon = getAppCompatImageView(itemView)
+            disableClipOnParents(icon)
             val subText = getSubTextView(itemView)
             val animatorSet = AnimatorSet()
 
