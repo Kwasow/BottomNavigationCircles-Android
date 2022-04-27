@@ -7,8 +7,8 @@
 ## Maintenance
 
 With the release of Material Design 3.0 I don't find it relevant to support this plugin any longer. It doesn't really fit
-the new guidelines and as I'm moving my personal projects to the new design style I also have little time to continue
-maintaining the package. I consider it to be stable and usable in it's current state.
+the new guidelines so this package will only recieve minimal mainenance that will mostly include minor bug fixes.
+I consider it to be stable and usable in it's current state.
 
 ## Instalation
 
@@ -32,7 +32,7 @@ Available versions:
 | Release | Version Tag                    | Comment                                  |
 |---------|--------------------------------|------------------------------------------|
 | legacy  | 1.0                            | material [version <= 1.3.0]              |
-| stable  | 1.1                            | material [version >= 1.4.0]              |
+| stable  | 1.1.1                          | material [version >= 1.4.0]              |
 | beta    | 1.1-beta6                      | material [version >= 1.4.0]              |
 
 ## Usage
