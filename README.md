@@ -29,11 +29,11 @@ dependencies {
 
 ```
 Available versions:
-| Release | Version Tag                    | Comment                                  |
-|---------|--------------------------------|------------------------------------------|
-| legacy  | 1.0                            | material [version <= 1.3.0]              |
-| stable  | 1.1.1                          | material [version >= 1.4.0]              |
-| beta    | 1.1-beta6                      | material [version >= 1.4.0]              |
+| Release | Version Tag | Comment                     |
+| ------- | ----------- | --------------------------- |
+| legacy  | 1.0         | material [version <= 1.3.0] |
+| stable  | 1.2         | material [version >= 1.4.0] |
+| beta    | 1.1-beta6   | material [version >= 1.4.0] |
 
 ## Usage
 

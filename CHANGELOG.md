@@ -1,4 +1,9 @@
-## 1.1 (in beta)
+## 1.2
+
+- Fixed issues with `material v1.5.0`
+
+## 1.1
+
  - Updated for material-1.4.0
  - Changed circle color setter
  - Added setting color in XML
